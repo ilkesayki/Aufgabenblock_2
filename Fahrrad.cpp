@@ -33,7 +33,7 @@ void Fahrrad::vAusgeben(std::ostream& o) const {
     // Tüketim, Tank İçeriği ve Anlık Hız sütunlarını doldur
     o << std::setw(15) << "" // Tüketim (Yok)
       << std::setw(15) << "" // Tank İçeriği (Yok)
-      << std::setw(10) << dGeschwindigkeit(); // Anlık Hız
+      << std::setw(15) << dGeschwindigkeit(); // Anlık Hız
 
     o << std::resetiosflags(std::ios::right) << std::setprecision(0);
 }

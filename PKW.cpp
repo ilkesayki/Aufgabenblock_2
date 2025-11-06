@@ -84,7 +84,7 @@ void PKW::vAusgeben(std::ostream& o) const {
     // Tüketim, Tank İçeriği ve Anlık Hız sütunlarını doldur
     o << std::setw(15) << dGesamtVerbrauch
       << std::setw(15) << p_dTankinhalt
-      << std::setw(10) << dGeschwindigkeit();
+      << std::setw(15) << dGeschwindigkeit();
 
     o << std::resetiosflags(std::ios::right) << std::setprecision(0);
 }

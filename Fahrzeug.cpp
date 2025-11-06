@@ -75,14 +75,14 @@ void Fahrzeug::vAusgeben(std::ostream& o) const { // <-- İMZA GÜNCELLENDİ
       << std::fixed << std::setprecision(2);
 
     // Maksimum Hız ve Toplam Mesafe
-    o << std::setw(20) << p_dMaxGeschwindigkeit
-      << std::setw(15) << p_dGesamtStrecke;
-
+    o << std::setw(7) << p_dMaxGeschwindigkeit
+      << std::setw(20) << p_dGesamtStrecke;
+/*
     // Alt sınıfların kendi verilerini yazması için boş sütunlar
-    o << std::setw(15) << "" // Tüketim için
-      << std::setw(15) << "" // Tank İçeriği için
+    o << std::setw(5) << "" // Tüketim için
+      << std::setw(10) << "" // Tank İçeriği için
       << std::setw(10) << ""; // Anlık Hız için
-
+*/
     o << std::resetiosflags(std::ios::left)
       << std::resetiosflags(std::ios::right)
       << std::setprecision(0);
