@@ -14,29 +14,31 @@
 
 class PKW : public Fahrzeug {
 private:
-    double p_dVerbrauch;	// Fuel consumption rate.
-    double p_dTankvolumen;	// Max tank capacity.
-    double p_dTankinhalt;	// Current fuel content.
+    double p_dVerbrauch;
+    double p_dTankvolumen;
+    double p_dTankinhalt;
 
 public:
-    // Constructor (Initializes base and fuel properties).
+
     PKW(std::string name, double maxGeschwindigkeit, double verbrauch, double tankvolumen = 55.0);
 
-    // Derived class destructor.
+    // derived class destructor!!! avoid memory leak
     virtual ~PKW() {}
 
-    // Fueling method (Fills the tank, default fills completely).
+    // Fueling method dMenge = infinity
     double dTanken(double dMenge = std::numeric_limits<double>::infinity());
 
-    // --- Polymorphic Overrides ---
-    // Overridden to include fuel consumption and stopping logic.
+
+    //overridden for fuel consumption and stopping logic when empty
     virtual void vSimulieren() override;
 
-    // Overridden to add fuel data to the output.
+    //overridden to add fuel data to the output
     virtual void vAusgeben(std::ostream& o) const override;
 
-    // Getter
+    //getter
     double getTankinhalt() const { return p_dTankinhalt; }
+
+    virtual void vZeichnen(const Weg& weg) const override;
 };
 
 #endif /* PKW_H_ */

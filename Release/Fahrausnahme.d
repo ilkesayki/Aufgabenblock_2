@@ -1,7 +1,7 @@
-Fahrrad.o: ../Fahrrad.cpp ../Fahrrad.h ../Fahrzeug.h \
+Fahrausnahme.o: ../Fahrausnahme.cpp ../Fahrausnahme.h ../Fahrzeug.h \
   ../Simulationsobjekt.h ../Verhalten.h ../Weg.h ../Tempolimit.h \
-  ../vertagt_liste.h ../vertagt_aktion.h ../SimuClient.h
-../Fahrrad.h:
+  ../vertagt_liste.h ../vertagt_aktion.h
+../Fahrausnahme.h:
 ../Fahrzeug.h:
 ../Simulationsobjekt.h:
 ../Verhalten.h:
@@ -9,4 +9,3 @@ Fahrrad.o: ../Fahrrad.cpp ../Fahrrad.h ../Fahrzeug.h \
 ../Tempolimit.h:
 ../vertagt_liste.h:
 ../vertagt_aktion.h:
-../SimuClient.h:

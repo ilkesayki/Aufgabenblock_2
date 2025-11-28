@@ -12,18 +12,18 @@
 
 class Fahrrad : public Fahrzeug {
 public:
-	// Constructor (Calls base class constructor).
+
     Fahrrad(std::string name, double maxGeschwindigkeit);
-    // Derived class destructor. Base class destructor is already virtual.
+    // derived class destructor/ cuz base class destructor is already virtual
     virtual ~Fahrrad() {}
 
-    // --- Polymorphic Overrides ---
-
-    // Overridden to calculate the speed based on accumulated distance (speed reduction logic).
+    //overridden to calculate the speed (speed reduction)
     virtual double dGeschwindigkeit() const override;
 
-    // Overridden to output bike data, filling PKW-specific columns with empty space.
+    //overridden to output bike data, filling PKW-specific columns with empty space.
     virtual void vAusgeben(std::ostream& o) const override;
+
+    virtual void vZeichnen(const Weg& weg) const override;
 };
 
 #endif /* FAHRRAD_H_ */

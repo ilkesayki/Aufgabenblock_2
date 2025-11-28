@@ -8,57 +8,43 @@
 #ifndef FAHRZEUG_H_
 #define FAHRZEUG_H_
 
-#include <iostream>
-#include <string>
-#include <iomanip>
+#include "Simulationsobjekt.h"
+#include "Verhalten.h"
+#include "Weg.h"
+#include <memory>
+#include <limits>
 
-// Global time declaration (Needed for synchronization across the system).
 extern double dGlobaleZeit;
 
-class Fahrzeug {
-private:
-    static int p_iMaxID; // Static counter for unique ID generation.
-
-protected: // <--- ID and Name moved to protected
-    // Stammdaten (Core Data) and members requiring subclass access.
-    const int p_iID;	// Unique, constant ID.
-    std::string p_sName; // Vehicle Name.
-
-    // Simulation Parameters
+class Fahrzeug : public Simulationsobjekt { // Kalıtım eklendi
+protected:
     double p_dMaxGeschwindigkeit;
-    double p_dGesamtStrecke;	// Total distance (km).
-    double p_dGesamtZeit;		// Total time (h).
-    double p_dZeit;				// Last processed time (for synchronization).
+    double p_dGesamtStrecke;
+    double p_dGesamtZeit;
+    std::unique_ptr<Verhalten> p_pVerhalten; // Davranış nesnesi
+    double p_dAbschnittStrecke; // O anki yolda gidilen mesafe
 
 public:
-    // Constructors
     Fahrzeug(std::string name = "");
     Fahrzeug(std::string name, double maxGeschwindigkeit);
-
-    // Virtual Destructor (CRITICAL for correct polymorphic memory cleanup).
     virtual ~Fahrzeug();
 
-    // --- Rule of Three/Five Implementation ---
-    Fahrzeug(const Fahrzeug&) = delete;			// Copy Constructor DELETED (Enforce single ownership/Smart Pointers).
-    Fahrzeug& operator=(const Fahrzeug& other);	// Assignment operator defined (Copies only Name/Stammdaten).
+    // Fahrzeug copy ctor'u da silmek iyi pratiktir (base silindiği için otomatik silinir ama explicit olsun)
+    Fahrzeug(const Fahrzeug&) = delete;
+    Fahrzeug& operator=(const Fahrzeug& other);
 
-    // Public Getters (Required due to p_iID/p_sName being protected).
-    int getID() const { return p_iID; }
-    const std::string& getName() const { return p_sName; }
+    virtual void vSimulieren() override;
+    virtual void vAusgeben(std::ostream& o) const override;
+    virtual double dGeschwindigkeit() const;
 
-    // Comparison Operator (Based on p_dGesamtStrecke).
     bool operator<(const Fahrzeug& other) const;
 
-    // --- Virtual Methods (Polymorphism) ---
-    virtual double dGeschwindigkeit() const;
-    virtual void vAusgeben(std::ostream& o) const; // YENİ İMZA
-    virtual void vSimulieren();
-
-    // Static Header output function.
     static void vKopf();
+
+    void vNeueStrecke(Weg& weg);
+    void vNeueStrecke(Weg& weg, double startzeit);
+    double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
+
+    virtual void vZeichnen(const Weg& weg) const;
 };
-
-// Non-member Output Operator (CRITICAL for polymorphic output).
-std::ostream& operator<<(std::ostream& o, const Fahrzeug& fzg);
-
 #endif /* FAHRZEUG_H_ */
