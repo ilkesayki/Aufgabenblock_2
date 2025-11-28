@@ -295,52 +295,71 @@ void vAufgabe_6() {
 
 
 int main() {
-    // --- GÖREV 1: Pointerlar ve Bellek Yönetimi ---
-    // Statik ve dinamik nesneler, smart pointer testleri[cite: 334].
-    dGlobaleZeit = 0.0; // Zamanı sıfırla
-    vAufgabe_1();
-    cout << "\n\n*******************************************************\n";
-    cout << "Press ENTER to continue to Task 2..." << endl;
-    cin.get(); // İsteğe bağlı: Çıktıyı okumak için bekletme
+    int iAuswahl;
 
-    // --- GÖREV 2: Kalıtım ve Kullanıcı Girdisi ---
-    // PKW/Fahrrad üretimi ve kullanıcıdan veri alma[cite: 396].
-    dGlobaleZeit = 0.0;
-    // DİKKAT: Bu fonksiyon konsoldan sayı girmeni bekleyecek!
-    vAufgabe_2();
-    cout << "\n\n*******************************************************\n";
+    while (true) {
+        // Menü Yazıları
+        std::cout << "\n\n==============================================" << std::endl;
+        std::cout << "VERKEHRSSIMULATION - HAUPTMENU" << std::endl;
+        std::cout << "==============================================" << std::endl;
+        std::cout << "1. vAufgabe_1() : Statisch, Dynamisch & Smart Pointers" << std::endl;
+        std::cout << "2. vAufgabe_2() : Fahrzeuge, PKW & Fahrrad (Eingabe)" << std::endl;
+        std::cout << "3. vAufgabe_3() : Operator Overloading" << std::endl;
+        std::cout << "4. vAufgabe_4() : Weg & Listen" << std::endl;
+        std::cout << "5. vAufgabe_5() : Verhalten (Parken & Fahren)" << std::endl;
+        std::cout << "6. vAufgabe_6() : Grafik & Exceptions" << std::endl;
+        std::cout << "0. Beenden" << std::endl;
+        std::cout << "----------------------------------------------" << std::endl;
+        std::cout << "Ihre Auswahl: ";
+        std::cin >> iAuswahl;
 
-    // cin tamponunu temizlemek gerekebilir (vAufgabe_2'den kalan enter tuşu için)
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        // Hatalı giriş kontrolü (Harf girilirse döngü bozulmasın diye)
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Ungueltige Eingabe! Bitte eine Zahl eingeben." << std::endl;
+            continue;
+        }
 
-    // --- GÖREV 3: Operatör Aşırı Yükleme ---
-    // <<, < ve = operatörlerinin testi[cite: 441].
-    dGlobaleZeit = 0.0;
-    vAufgabe_3();
-    cout << "\n\n*******************************************************\n";
+        // Çıkış komutu
+        if (iAuswahl == 0) {
+            std::cout << "Programm beendet." << std::endl;
+            break;
+        }
 
-    // --- GÖREV 4: Yol (Weg) Sınıfı ---
-    // Yolların oluşturulması ve araçların listeye eklenmesi[cite: 504].
-    dGlobaleZeit = 0.0;
-    vAufgabe_4();
-    cout << "\n\n*******************************************************\n";
+        // Her görevden önce global zamanı sıfırla!
+        dGlobaleZeit = 0.0;
 
-    // --- GÖREV 5: Davranış (Verhalten) ---
-    // Park eden ve süren araçların ayrımı[cite: 545].
-    dGlobaleZeit = 0.0;
-    vAufgabe_5();
-    cout << "\n\n*******************************************************\n";
+        switch (iAuswahl) {
+            case 1:
+                vAufgabe_1();
+                break;
+            case 2:
+                vAufgabe_2();
+                break;
+            case 3:
+                vAufgabe_3();
+                break;
+            case 4:
+                vAufgabe_4();
+                break;
+            case 5:
+                vAufgabe_5();
+                break;
+            case 6:
+                // Grafik için uyarı
+                std::cout << ">>> Starten Sie 'SimuServer.jar' im Hintergrund! <<<" << std::endl;
+                vAufgabe_6();
+                break;
+            default:
+                std::cout << "Unbekannte Auswahl: " << iAuswahl << std::endl;
+                break;
+        }
 
-    // --- GÖREV 6: Grafik ve İstisnalar ---
-    // Görselleştirme ve Exception Handling[cite: 638].
-    dGlobaleZeit = 0.0;
-
-    cout << "Starting Graphic Simulation (Ensure SimuServer is running)..." << endl;
-    // SimuServer.jar açık değilse bu fonksiyon hata mesajı verip çıkar.
-    vAufgabe_6();
-
-    cout << "\n\n*******************************************************\n";
-    cout << "ALL TASKS COMPLETED." << endl;
+        // Görev bittikten sonra biraz bekleme veya enter isteme (Opsiyonel)
+        // std::cout << "\nDruecken Sie ENTER fuer das Menue...";
+        // std::cin.ignore(); std::cin.get();
+    }
 
     return 0;
 }

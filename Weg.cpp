@@ -60,8 +60,11 @@ void Weg::vAusgeben(std::ostream& o) const {
     o << ": " << std::setw(8) << std::fixed << std::setprecision(2) << p_dLaenge
       << " ( ";
 
-    // Araçların sadece isimlerini yazdır
     for (const auto& fzg : p_pFahrzeuge) {
+        // --- GÜVENLİK KONTROLÜ EKLENDİ ---
+        if (fzg == nullptr) continue; // Araç yoksa/silindiyse atla
+        // ---------------------------------
+
         o << fzg->getName() << " ";
     }
     o << ")";

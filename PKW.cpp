@@ -48,35 +48,36 @@ double PKW::dTanken(double dMenge) {
 
 // Simulation function (vSimulieren)
 void PKW::vSimulieren() {
-    // 1. Zaman kontrolü (Aynı)
     if (p_dZeit >= dGlobaleZeit) return;
 
     double dZeitIntervall = dGlobaleZeit - p_dZeit;
+    double dStrecke = 0.0;
 
-    // 2. ÖNCE Davranıştan (Verhalten) gidilebilecek yolu al
-    // Bu satırda Parken::dStrecke çağrılırsa ve zaman geldiyse 'Losfahren' fırlatılır.
-    // Fahren::dStrecke çağrılırsa ve yol bittiyse 'Streckenende' fırlatılır.
-    // Eğer istisna fırlatılırsa, fonksiyon burada kesilir ve Weg::vSimulieren yakalar.
-    double dStrecke = p_pVerhalten->dStrecke(*this, dZeitIntervall);
+    // --- DÜZELTME BURADA ---
+    // Eğer davranış atanmışsa (Yoldaysa)
+    if (p_pVerhalten) {
+        dStrecke = p_pVerhalten->dStrecke(*this, dZeitIntervall);
+    }
+    // Eğer davranış YOKSA (vAufgabe_2 gibi yolsuz sürüşler için)
+    else {
+        dStrecke = dGeschwindigkeit() * dZeitIntervall;
+    }
+    // -----------------------
 
-    // 3. Yakıt Hesabı
+    // Yakıt Hesabı
     double dVerbrauchStrecke = dStrecke * p_dVerbrauch / 100.0;
 
     if (p_dTankinhalt > 0.0) {
         if (p_dTankinhalt < dVerbrauchStrecke) {
-            // Yakıt yetmiyor, gidilebilecek mesafeyi kısıtla
             dStrecke = p_dTankinhalt * 100.0 / p_dVerbrauch;
-            p_dTankinhalt = 0.0; // Depo bitti
+            p_dTankinhalt = 0.0;
         } else {
-            // Yakıt yetiyor
             p_dTankinhalt -= dVerbrauchStrecke;
         }
     } else {
-        // Yakıt yoksa gidilemez (Park halinde olsa bile 0 döner zaten)
         dStrecke = 0.0;
     }
 
-    // 4. Değerleri Güncelle (Fahrzeug sınıfındaki mantığın aynısı ama yakıt kısıtlı mesafe ile)
     p_dGesamtStrecke += dStrecke;
     p_dAbschnittStrecke += dStrecke;
     p_dGesamtZeit += dZeitIntervall;

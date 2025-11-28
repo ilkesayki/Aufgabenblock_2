@@ -46,19 +46,19 @@ void Fahrzeug::vSimulieren() {
     if (p_dZeit >= dGlobaleZeit) return;
 
     double dZeitIntervall = dGlobaleZeit - p_dZeit;
-
-    // --- DEĞİŞİKLİK BURADA ---
     double dStrecke = 0.0;
+
+    // --- DÜZELTME BURADA ---
     if (p_pVerhalten) {
-        // Mesafeyi davranış nesnesine soruyoruz
         dStrecke = p_pVerhalten->dStrecke(*this, dZeitIntervall);
     } else {
-        // Davranış atanmamışsa eski usul (Test uyumluluğu için opsiyonel)
+        // Davranış yoksa varsayılan hızla git
         dStrecke = dGeschwindigkeit() * dZeitIntervall;
     }
+    // -----------------------
 
     p_dGesamtStrecke += dStrecke;
-    p_dAbschnittStrecke += dStrecke; // Yol üzerindeki mesafe de artar
+    p_dAbschnittStrecke += dStrecke; // Yol yoksa burası da artar, sorun değil
     p_dGesamtZeit += dZeitIntervall;
     p_dZeit = dGlobaleZeit;
 }
