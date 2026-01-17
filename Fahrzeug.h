@@ -46,5 +46,7 @@ public:
     double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
 
     virtual void vZeichnen(const Weg& weg) const;
+
+    virtual double dTanken(double dMenge = std::numeric_limits<double>::infinity());
 };
 #endif /* FAHRZEUG_H_ */

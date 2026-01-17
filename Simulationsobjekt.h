@@ -26,7 +26,10 @@ public:
     virtual ~Simulationsobjekt();
 
     // Copy Constructor yasaklandı (Yönerge gereği)
+
     Simulationsobjekt(const Simulationsobjekt&) = delete;
+
+
 
     // Assignment operator (Sadece ismi kopyalar, ID değişmez)
     Simulationsobjekt& operator=(const Simulationsobjekt& other);
@@ -40,6 +43,7 @@ public:
     virtual void vSimulieren() = 0;
 
     virtual void vAusgeben(std::ostream& o) const;
+    virtual void vEinlesen(std::istream& i);
 
     // Operatörler
     bool operator==(const Simulationsobjekt& other) const;

@@ -46,3 +46,10 @@ std::ostream& operator<<(std::ostream& o, const Simulationsobjekt& so) {
     return o;
 }
 
+
+void Simulationsobjekt::vEinlesen(std::istream& i) {
+    // Basitçe ismi okusun, şimdilik yeterli.
+    if (p_sName == "") {
+        i >> p_sName;
+    }
+}

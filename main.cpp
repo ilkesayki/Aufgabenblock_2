@@ -10,6 +10,7 @@
 #include "Fahrrad.h"
 #include "Weg.h"
 #include "SimuClient.h"
+#include "Kreuzung.h"
 
 #include <iostream>
 #include <string>
@@ -29,6 +30,7 @@ void vAufgabe_3();
 void vAufgabe_4();
 void vAufgabe_5();
 void vAufgabe_6();
+void vAufgabe_7();
 // ------------------------------------------
 
 // Global Time, declared extern in classes
@@ -213,14 +215,22 @@ void vAufgabe_3() {
 }
 
 void vAufgabe_4() {
+    std::cout << "\n--- 4. Task: Weg & Listen Test ---" << std::endl;
+
     Weg w1("B54", 50.0, Tempolimit::Innerorts);
 
     auto p1 = std::make_unique<PKW>("BMW", 120, 8.5);
     auto p2 = std::make_unique<Fahrrad>("BMX", 25);
 
-    // Araçları yola ekle
+    // Araçları yola ekle (Şu an kuyrukta bekliyorlar)
     w1.vAnnahme(std::move(p1));
     w1.vAnnahme(std::move(p2));
+
+    // --- DÜZELTME BURADA ---
+    // Listeyi güncellemek için simülasyonu bir kez tetikliyoruz.
+    // Bu işlem, bekleme kuyruğundaki 'push_back' emirlerini gerçekleştirir.
+    w1.vSimulieren();
+    // -----------------------
 
     Weg::vKopf();
     std::cout << w1 << std::endl;
@@ -293,6 +303,94 @@ void vAufgabe_6() {
     vBeendeGrafik();
 }
 
+void vAufgabe_7() {
+    // 1. Grafik Başlat
+    bInitialisiereGrafik(1000, 600); // Pencereyi biraz büyüttük
+
+    // 2. Kavşakları Oluştur
+    // Kr2'de benzin istasyonu var (1000 Litre)
+    auto Kr1 = std::make_shared<Kreuzung>("Kr1");
+    auto Kr2 = std::make_shared<Kreuzung>("Kr2", 1000.0);
+    auto Kr3 = std::make_shared<Kreuzung>("Kr3");
+    auto Kr4 = std::make_shared<Kreuzung>("Kr4");
+
+    // Kavşakları Çiz (Koordinatlar PDF Fig 5.4'e göre yaklaşık değerler)
+    bZeichneKreuzung(680, 40);  // Kr1
+    bZeichneKreuzung(680, 300); // Kr2
+    bZeichneKreuzung(680, 570); // Kr3
+    bZeichneKreuzung(320, 300); // Kr4
+
+    // 3. Yolları Bağla (Strassen)
+    // Parametreler: (K1, K2, IsimHin, IsimRueck, Uzunluk, SollamaYasagi, HızLimiti)
+
+    // Strasse 1 (Kr1 <-> Kr2): 40km, Innerorts
+    Kreuzung::vVerbinde(Kr1, Kr2, "W12", "W21", 40.0, true, Tempolimit::Innerorts);
+    int k1[] = {680, 40, 680, 300};
+    bZeichneStrasse("W12", "W21", 40, 2, k1);
+
+    // Strasse 2 (Kr2 <-> Kr3): 115km, Landstrasse
+    Kreuzung::vVerbinde(Kr2, Kr3, "W23a", "W32a", 115.0, false, Tempolimit::Landstrasse);
+    int k2[] = {680, 300, 850, 300, 970, 390, 970, 500, 850, 570, 680, 570}; // Kıvrımlı yol
+    bZeichneStrasse("W23a", "W32a", 115, 6, k2);
+
+    // Strasse 3 (Kr2 <-> Kr3 düz): 40km, Innerorts
+    Kreuzung::vVerbinde(Kr2, Kr3, "W23b", "W32b", 40.0, true, Tempolimit::Innerorts);
+    int k3[] = {680, 300, 680, 570};
+    bZeichneStrasse("W23b", "W32b", 40, 2, k3);
+
+    // Strasse 4 (Kr2 <-> Kr4): 55km, Innerorts
+    Kreuzung::vVerbinde(Kr2, Kr4, "W24", "W42", 55.0, true, Tempolimit::Innerorts);
+    int k4[] = {680, 300, 320, 300};
+    bZeichneStrasse("W24", "W42", 55, 2, k4);
+
+    // Strasse 5 (Kr3 <-> Kr4): 85km, Landstrasse
+    Kreuzung::vVerbinde(Kr3, Kr4, "W34", "W43", 85.0, false, Tempolimit::Landstrasse);
+    int k5[] = {680, 570, 500, 570, 350, 510, 320, 420, 320, 300};
+    bZeichneStrasse("W34", "W43", 85, 5, k5);
+
+    // Strasse 6 (Kr4 <-> Kr4 Loop): 130km, Landstrasse
+    // Kendi kendine dönen yol biraz özeldir, grafikte hata verirse burayı yorum satırına alabilirsin.
+    // Ancak mantıken bir kavşağı kendine bağlayabiliriz.
+    Kreuzung::vVerbinde(Kr4, Kr4, "W44a", "W44b", 130.0, false, Tempolimit::Landstrasse);
+    int k6[] = {320, 300, 170, 300, 70, 250, 80, 90, 200, 60, 320, 150, 320, 300};
+    bZeichneStrasse("W44a", "W44b", 130, 7, k6);
+
+
+    // 4. Araçları Oluştur ve Yerleştir
+    auto p1 = std::make_unique<PKW>("BMW", 120, 8.5);
+    auto p2 = std::make_unique<Fahrrad>("BMX", 25);
+    auto p3 = std::make_unique<PKW>("Audi", 150, 9.0);
+
+    // Araçları Kr1'e veriyoruz, o uygun bir yola koyacak
+    Kr1->vAnnahme(std::move(p1), 0.5); // 0.5 saat sonra kalksın
+    Kr1->vAnnahme(std::move(p2), 0.0);
+    Kr1->vAnnahme(std::move(p3), 1.0);
+
+
+    // 5. Simülasyon Döngüsü
+    dGlobaleZeit = 0.0;
+    for (int i = 0; i < 500; ++i) { // Uzun süreli simülasyon
+        dGlobaleZeit += 0.2;
+        vSetzeZeit(dGlobaleZeit);
+
+        // Tüm kavşakları simüle et (Kavşaklar da yollarını simüle eder)
+        Kr1->vSimulieren();
+        Kr2->vSimulieren();
+        Kr3->vSimulieren();
+        Kr4->vSimulieren();
+
+        // Çizim (Weg::vZeichnen'e nullptr kontrolü eklediğin için sorun olmaz)
+        // SimuClient her şeyi otomatik çizmez, yolları tek tek çizdirmemiz lazım
+        // Ama biz yolları Kreuzung içinde tutuyoruz.
+        // Basitlik adına Kreuzung içine vZeichnen ekleyebilirsin veya burada manuel çizebilirsin.
+        // Hızlı çözüm: Kreuzung'un vSimulieren'i içinde yolların vSimulieren'i çağrılıyor.
+        // Yolların vSimulieren'i içinde de vZeichnen çağrılıyor (Weg.cpp'deki kodunda var mı?).
+        // Eğer Weg::vSimulieren içinde fzg->vZeichnen(*this) varsa otomatik çizilir.
+
+        vSleep(50);
+    }
+    vBeendeGrafik();
+}
 
 int main() {
     int iAuswahl;
@@ -308,6 +406,7 @@ int main() {
         std::cout << "4. vAufgabe_4() : Weg & Listen" << std::endl;
         std::cout << "5. vAufgabe_5() : Verhalten (Parken & Fahren)" << std::endl;
         std::cout << "6. vAufgabe_6() : Grafik & Exceptions" << std::endl;
+        std::cout << "7. vAufgabe_7() : Verkehrsnetz (Kreuzungen & Grafik)" << std::endl;
         std::cout << "0. Beenden" << std::endl;
         std::cout << "----------------------------------------------" << std::endl;
         std::cout << "Ihre Auswahl: ";
@@ -350,6 +449,11 @@ int main() {
                 // Grafik için uyarı
                 std::cout << ">>> Starten Sie 'SimuServer.jar' im Hintergrund! <<<" << std::endl;
                 vAufgabe_6();
+                break;
+                // main içindeki switch'e ekle:
+            case 7:
+                std::cout << ">>> Grafik: Netzwerk-Simulation <<<" << std::endl;
+                vAufgabe_7();
                 break;
             default:
                 std::cout << "Unbekannte Auswahl: " << iAuswahl << std::endl;

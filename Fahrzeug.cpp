@@ -131,3 +131,7 @@ void Fahrzeug::vKopf() {
 
     std::cout << "------------------------------------------------------------------------------------------" << std::endl;
 }
+
+double Fahrzeug::dTanken(double dMenge) {
+    return 0.0; // Varsayılan araçlar (örn. Bisiklet) benzin almaz.
+}

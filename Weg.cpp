@@ -10,6 +10,7 @@
 #include "Fahrzeug.h" // Burada include ediyoruz çünkü metodlarını kullanacağız
 #include "Parken.h"
 #include "Fahrausnahme.h"
+#include <limits>
 
 Weg::Weg(std::string name, double laenge, Tempolimit limit)
     : Simulationsobjekt(name),

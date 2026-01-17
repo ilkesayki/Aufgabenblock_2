@@ -26,7 +26,7 @@ public:
     virtual ~PKW() {}
 
     // Fueling method dMenge = infinity
-    double dTanken(double dMenge = std::numeric_limits<double>::infinity());
+    double dTanken(double dMenge = std::numeric_limits<double>::infinity()) override;
 
 
     //overridden for fuel consumption and stopping logic when empty
