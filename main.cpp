@@ -20,16 +20,18 @@
 #include <cmath>
 #include <iomanip>
 #include <algorithm>
+#include <random>
 
 using namespace std;
 
 // Tasks
-void vAufgabe_1();
+void vAufgabe_1a();
 void vAufgabe_2();
 void vAufgabe_3();
 void vAufgabe_4();
 void vAufgabe_5();
 void vAufgabe_6();
+void vAufgabe_6a();
 void vAufgabe_7();
 // ------------------------------------------
 
@@ -37,7 +39,7 @@ void vAufgabe_7();
 double dGlobaleZeit = 0.0;
 
 // Smart Pointer and Memory Management Test
-void vAufgabe_1() {
+void vAufgabe_1a() {
     cout << "--- 4.2.4: Static, Dynamic and Smart Pointer Test ---" << endl;
 
     // Note: Output within constructors/destructors (Fahrzeug.cpp) remains in German
@@ -303,6 +305,68 @@ void vAufgabe_6() {
     vBeendeGrafik();
 }
 
+void vAufgabe_6a() {
+    using namespace vertagt;
+
+    std::cout << ">>> vAufgabe_6a: VListe Testi (Tamsayilar ile) <<<" << std::endl;
+
+    // 1. Liste oluştur ve Rastgele Sayılarla Doldur
+    VListe<int> liste;
+    static std::mt19937 device(0);
+    std::uniform_int_distribution<int> dist(1, 10);
+
+    for (int i = 0; i < 10; ++i) {
+        liste.push_back(dist(device));
+    }
+
+    // --- DÜZELTME BURADA ---
+    // Sayıların listeye girmesi için GÜNCELLEME yapıyoruz
+    liste.vAktualisieren();
+    // -----------------------
+
+    // 2. Listeyi Yazdır
+    std::cout << "Liste (Ilk Hali): ";
+    for (auto& sayi : liste) {
+        std::cout << sayi << " ";
+    }
+    std::cout << std::endl;
+
+    // 3. 5'ten büyük sayıları sil (erase komutu ver)
+    for (auto it = liste.begin(); it != liste.end(); ++it) {
+        if (*it > 5) {
+            liste.erase(it);
+        }
+    }
+
+    // 4. Listeyi Tekrar Yazdır (Değişiklik olMAMAlı, çünkü güncellemedik)
+    std::cout << "Liste (Aktualisieren oncesi - Silinmedi): ";
+    for (auto& sayi : liste) {
+        std::cout << sayi << " ";
+    }
+    std::cout << std::endl;
+
+    // 5. Listeyi Güncelle (Şimdi silinmeli)
+    liste.vAktualisieren();
+
+    // 6. Sonuç
+    std::cout << "Liste (Aktualisieren sonrasi - >5 Silindi): ";
+    for (auto& sayi : liste) {
+        std::cout << sayi << " ";
+    }
+    std::cout << std::endl;
+
+    // 7. Başa ve Sona ekle
+    liste.push_front(99);
+    liste.push_back(100);
+    liste.vAktualisieren();
+
+    std::cout << "Liste (99 ve 100 eklendi): ";
+    for (auto& sayi : liste) {
+        std::cout << sayi << " ";
+    }
+    std::cout << std::endl;
+}
+
 void vAufgabe_7() {
     // 1. Grafik Başlat
     bInitialisiereGrafik(1000, 600); // Pencereyi biraz büyüttük
@@ -400,13 +464,14 @@ int main() {
         std::cout << "\n\n==============================================" << std::endl;
         std::cout << "VERKEHRSSIMULATION - HAUPTMENU" << std::endl;
         std::cout << "==============================================" << std::endl;
-        std::cout << "1. vAufgabe_1() : Statisch, Dynamisch & Smart Pointers" << std::endl;
+        std::cout << "1. vAufgabe_1a() : Statisch, Dynamisch & Smart Pointers" << std::endl;
         std::cout << "2. vAufgabe_2() : Fahrzeuge, PKW & Fahrrad (Eingabe)" << std::endl;
         std::cout << "3. vAufgabe_3() : Operator Overloading" << std::endl;
         std::cout << "4. vAufgabe_4() : Weg & Listen" << std::endl;
         std::cout << "5. vAufgabe_5() : Verhalten (Parken & Fahren)" << std::endl;
         std::cout << "6. vAufgabe_6() : Grafik & Exceptions" << std::endl;
-        std::cout << "7. vAufgabe_7() : Verkehrsnetz (Kreuzungen & Grafik)" << std::endl;
+        std::cout << "7. vAufgabe_6a() : VListe Testi (Int)" << std::endl;
+        std::cout << "8. vAufgabe_7() : Verkehrsnetz (Kreuzungen & Grafik)" << std::endl;
         std::cout << "0. Beenden" << std::endl;
         std::cout << "----------------------------------------------" << std::endl;
         std::cout << "Ihre Auswahl: ";
@@ -431,7 +496,7 @@ int main() {
 
         switch (iAuswahl) {
             case 1:
-                vAufgabe_1();
+                vAufgabe_1a();
                 break;
             case 2:
                 vAufgabe_2();
@@ -450,8 +515,10 @@ int main() {
                 std::cout << ">>> Starten Sie 'SimuServer.jar' im Hintergrund! <<<" << std::endl;
                 vAufgabe_6();
                 break;
-                // main içindeki switch'e ekle:
             case 7:
+            	vAufgabe_6a();
+            	break;
+            case 8:
                 std::cout << ">>> Grafik: Netzwerk-Simulation <<<" << std::endl;
                 vAufgabe_7();
                 break;
