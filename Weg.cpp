@@ -7,7 +7,7 @@
 
 
 #include "Weg.h"
-#include "Fahrzeug.h" // Burada include ediyoruz çünkü metodlarını kullanacağız
+#include "Fahrzeug.h"
 #include "Parken.h"
 #include "Fahrausnahme.h"
 #include <limits>
@@ -22,37 +22,30 @@ Weg::Weg(std::string name, double laenge, Tempolimit limit)
 Weg::~Weg() {}
 
 void Weg::vSimulieren() {
-    p_pFahrzeuge.vAktualisieren(); // Listeyi temizle
+    p_pFahrzeuge.vAktualisieren(); //update list
 
     for (auto& fzg : p_pFahrzeuge) {
-        // GÜVENLİK KONTROLÜ: Araç pAbgabe ile alınmış olabilir
-        if (fzg == nullptr) continue;
+        if (fzg == nullptr) continue; //Security check
 
         try {
             fzg->vSimulieren();
             fzg->vZeichnen(*this);
         }
         catch (const Fahrausnahme& e) {
-            e.vBearbeiten();
+            e.vBearbeiten(); //Prevent error and fix
         }
     }
     p_dZeit = dGlobaleZeit;
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fzg, double startzeit) {
-    // Araca yeni yolu ve start zamanını bildir (Park davranışı atanır)
-    fzg->vNeueStrecke(*this, startzeit);
-
-    // Park eden araçlar listenin BAŞINA eklenir (Yönerge Bölüm 5.4.4)
+    fzg->vNeueStrecke(*this, startzeit); //Parken cuz with starttime
     p_pFahrzeuge.push_front(std::move(fzg));
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fzg) {
-    // Araca yeni yolu bildir (Sürme davranışı atanır)
-    fzg->vNeueStrecke(*this);
-
-    // Süren araçlar listenin SONUNA eklenir
-    p_pFahrzeuge.push_back(std::move(fzg));
+    fzg->vNeueStrecke(*this); // Fahren
+    p_pFahrzeuge.push_back(std::move(fzg)); //ownership moved
 }
 
 void Weg::vAusgeben(std::ostream& o) const {
@@ -62,10 +55,7 @@ void Weg::vAusgeben(std::ostream& o) const {
       << " ( ";
 
     for (const auto& fzg : p_pFahrzeuge) {
-        // --- GÜVENLİK KONTROLÜ EKLENDİ ---
-        if (fzg == nullptr) continue; // Araç yoksa/silindiyse atla
-        // ---------------------------------
-
+        if (fzg == nullptr) continue;
         o << fzg->getName() << " ";
     }
     o << ")";
@@ -85,29 +75,23 @@ double Weg::getTempolimit() const {
 
 void Weg::vZeichnen() const {
     for (const auto& fzg : p_pFahrzeuge) {
-        // --- GÜVENLİK KONTROLÜ EKLENDİ ---
-        // Eğer araç transfer edildiyse (boşsa) çizmeye çalışma!
         if (fzg == nullptr) continue;
-        // ---------------------------------
-
-        fzg->vZeichnen(*this);
+        fzg->vZeichnen(*this); //print one by one
     }
 }
 
 std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug& fzg) {
-    // Listeyi tara
-    for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
-        // GÜVENLİK KONTROLÜ 1: İşaretçi boş mu?
-        if (*it == nullptr) continue; // Boşsa atla, yoksa **it yapınca çökeriz!
 
-        // GÜVENLİK KONTROLÜ 2: Aradığımız araç mı?
-        if (**it == fzg) {
-            // Aracı listeden çek al
+    for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) { //it -> iterator
+
+        if (*it == nullptr) continue; //*it -> unique_ptr<Fahrzeug>
+
+        if (**it == fzg) {	//**it -> Fahrzeug
+
             std::unique_ptr<Fahrzeug> temp = std::move(*it);
-            // Silme emri ver (Gecikmeli silinir)
             p_pFahrzeuge.erase(it);
-            return temp;
+            return temp; // give his new owner (z.B. Krezung)
         }
     }
-    return nullptr; // Bulunamadı
+    return nullptr;
 }

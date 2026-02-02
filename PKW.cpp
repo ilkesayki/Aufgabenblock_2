@@ -31,17 +31,17 @@ double PKW::dTanken(double dMenge) {
     double dMaxFuellmenge = p_dTankvolumen - p_dTankinhalt;
     double dTatsaechlicheMenge;
 
-
+    //if not given than infinity
     if (dMenge == std::numeric_limits<double>::infinity()) {
         dTatsaechlicheMenge = dMaxFuellmenge;
     } else {
-    	//fill up either requested or maximum amount.
+    	//fill up either dMenge or full.
         dTatsaechlicheMenge = std::min(dMenge, dMaxFuellmenge);
     }
 
     if (dTatsaechlicheMenge > 0) {
         p_dTankinhalt += dTatsaechlicheMenge;
-        return dTatsaechlicheMenge;	//return the amount
+        return dTatsaechlicheMenge;
     }
     return 0.0;
 }
@@ -53,20 +53,18 @@ void PKW::vSimulieren() {
     double dZeitIntervall = dGlobaleZeit - p_dZeit;
     double dStrecke = 0.0;
 
-    // --- DÜZELTME BURADA ---
-    // Eğer davranış atanmışsa (Yoldaysa)
+    // Parken or Fahren
     if (p_pVerhalten) {
         dStrecke = p_pVerhalten->dStrecke(*this, dZeitIntervall);
     }
-    // Eğer davranış YOKSA (vAufgabe_2 gibi yolsuz sürüşler için)
+    // without Verhalten
     else {
         dStrecke = dGeschwindigkeit() * dZeitIntervall;
     }
-    // -----------------------
 
-    // Yakıt Hesabı
+
     double dVerbrauchStrecke = dStrecke * p_dVerbrauch / 100.0;
-
+    //Enough Fuel?
     if (p_dTankinhalt > 0.0) {
         if (p_dTankinhalt < dVerbrauchStrecke) {
             dStrecke = p_dTankinhalt * 100.0 / p_dVerbrauch;
@@ -85,14 +83,13 @@ void PKW::vSimulieren() {
 }
 
 void PKW::vZeichnen(const Weg& weg) const {
-    // bZeichnePKW(Simülasyon ismi, Yol ismi, Göreceli Konum, Hız, Yakıt)
     double dRelPos = p_dAbschnittStrecke / weg.getLaenge();
     bZeichnePKW(p_sName, weg.getName(), dRelPos, dGeschwindigkeit(), p_dTankinhalt);
 }
 
 // Output function (vAusgeben)
 void PKW::vAusgeben(std::ostream& o) const {
-	//base class outputs (ID, Name, MaxSpeed, TotalDistance)
+	// outputs (ID, Name, MaxSpeed, TotalDistance)
     Fahrzeug::vAusgeben(o);
 
     //adds PKW-specific data

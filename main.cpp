@@ -35,15 +35,12 @@ void vAufgabe_6a();
 void vAufgabe_7();
 // ------------------------------------------
 
-// Global Time, declared extern in classes
+
 double dGlobaleZeit = 0.0;
 
 // Smart Pointer and Memory Management Test
 void vAufgabe_1a() {
     cout << "--- 4.2.4: Static, Dynamic and Smart Pointer Test ---" << endl;
-
-    // Note: Output within constructors/destructors (Fahrzeug.cpp) remains in German
-    // to track creation/deletion operations with original log messages.
 
     // A) Static and Dynamic Objects
     cout << "\n[A] Static and Dynamic Objects:" << endl;
@@ -79,9 +76,9 @@ void vAufgabe_1a() {
 }
 
 
-//Inheritance, Fueling, and Polymorphism (User Input Version)
+//Inheritance, Fueling, and Polymorphism
 void vAufgabe_2() {
-    std::cout << "\n--- 4.3.4: PKW, Bicycle and Fueling Test (vAufgabe_2) (User Input Version) ---" << std::endl;
+    std::cout << "\n--- 4.3.4: PKW, Bicycle and Fueling Test (vAufgabe_2) ---" << std::endl;
 
     // --- PKW Input ---
     int anzahlPKW;
@@ -173,7 +170,7 @@ void vAufgabe_2() {
 void vAufgabe_3() {
     std::cout << "\n--- 4.4.6: Operator Test (vAufgabe_3) ---" << endl;
 
-    // Note: Output within constructors/destructors remains in German log
+
     std::unique_ptr<PKW> pkw1 = std::make_unique<PKW>("BMW", 200.0, 8.0);
     std::unique_ptr<PKW> pkw2 = std::make_unique<PKW>("Audi", 180.0, 7.5);
     std::unique_ptr<Fahrrad> bike = std::make_unique<Fahrrad>("BMX", 35.0);
@@ -210,7 +207,7 @@ void vAufgabe_3() {
 
     std::cout << "Target (ID: " << pkw_target.getID() << ", Before Assignment): " << pkw_target << std::endl;
 
-    // Assignment (copies only name and max speed, other data like ID, distance, fuel is not copied)
+    // copies only name and max speed, other data like ID, distance, fuel is not copied
     pkw_target = *pkw1;
 
     std::cout << "Target (ID: " << pkw_target.getID() << ", After Assignment): " << pkw_target << std::endl;
@@ -224,15 +221,13 @@ void vAufgabe_4() {
     auto p1 = std::make_unique<PKW>("BMW", 120, 8.5);
     auto p2 = std::make_unique<Fahrrad>("BMX", 25);
 
-    // Araçları yola ekle (Şu an kuyrukta bekliyorlar)
+    // Add PKWs
     w1.vAnnahme(std::move(p1));
     w1.vAnnahme(std::move(p2));
 
-    // --- DÜZELTME BURADA ---
-    // Listeyi güncellemek için simülasyonu bir kez tetikliyoruz.
-    // Bu işlem, bekleme kuyruğundaki 'push_back' emirlerini gerçekleştirir.
+
     w1.vSimulieren();
-    // -----------------------
+
 
     Weg::vKopf();
     std::cout << w1 << std::endl;
@@ -245,14 +240,14 @@ void vAufgabe_5() {
     auto p2 = std::make_unique<Fahrrad>("BMX", 25);
     auto p3 = std::make_unique<PKW>("Audi", 150, 9.0);
 
-    // Park eden araç (3 saat sonra kalkacak)
+    // Wait til 3 hours
     w1.vAnnahme(std::move(p1), 3.0);
 
-    // Giden araçlar
+    // Ongoing PKWs
     w1.vAnnahme(std::move(p2));
     w1.vAnnahme(std::move(p3));
 
-    // Simülasyon Döngüsü
+    // Simulation Loop
     dGlobaleZeit = 0.0;
     for (int i = 0; i < 10; ++i) {
         dGlobaleZeit += 0.5;
@@ -264,8 +259,7 @@ void vAufgabe_5() {
 }
 
 void vAufgabe_6() {
-    // 1. Grafik Server ile bağlantı kur
-    // Eğer SimuServer.jar çalışmıyorsa bu adımda hata alabilirsin.
+
     if (bInitialisiereGrafik(800, 500)) {
         std::cout << "Grafik baslatildi!" << std::endl;
     } else {
@@ -273,35 +267,34 @@ void vAufgabe_6() {
         return;
     }
 
-    // 2. Yolları Oluştur (Gidiş ve Dönüş olarak çizilir ama biz şimdilik tek yol kullanıyoruz)
     Weg w1("B54", 500.0, Tempolimit::Autobahn);
 
-    // Yolu çizmek için koordinatları veriyoruz (Düz bir çizgi)
+    //Draw the Road
     int iKoord[] = { 100, 250, 700, 250 }; // x1, y1, x2, y2
-    bZeichneStrasse("B54", "B54_Rueck", 500, 2, iKoord); // Rückweg ismi formalite
+    bZeichneStrasse("B54", "B54_Rueck", 500, 2, iKoord); // Rückweg
 
     // 3. Araçları Oluştur
     auto p1 = std::make_unique<PKW>("BMW", 120, 8.5);
     auto p2 = std::make_unique<Fahrrad>("BMX", 25);
     auto p3 = std::make_unique<PKW>("Audi", 150, 9.0);
 
-    w1.vAnnahme(std::move(p1), 3.0); // Park eden araç
+    w1.vAnnahme(std::move(p1), 3.0); // Parking PKW
     w1.vAnnahme(std::move(p2));
     w1.vAnnahme(std::move(p3));
 
-    // 4. Simülasyon Döngüsü
+    // Simulation Loop
     dGlobaleZeit = 0.0;
-    for (int i = 0; i < 200; ++i) { // Daha uzun süre dönsün
-        dGlobaleZeit += 0.2; // Zaman adımını küçülttük daha akıcı görünsün
-        vSetzeZeit(dGlobaleZeit); // Server'daki saati güncelle
+    for (int i = 0; i < 200; ++i) {
+        dGlobaleZeit += 0.2;
+        vSetzeZeit(dGlobaleZeit);
 
-        w1.vSimulieren(); // Hatalar (Exception) ekrana basılmaya devam edecek
-        w1.vZeichnen();   // Grafik güncelle
+        w1.vSimulieren();
+        w1.vZeichnen();
 
-        vSleep(100); // 100ms bekle (Simülasyonu yavaşlat)
+        vSleep(100);
     }
 
-    // Bağlantıyı kes
+
     vBeendeGrafik();
 }
 
@@ -310,7 +303,7 @@ void vAufgabe_6a() {
 
     std::cout << ">>> vAufgabe_6a: VListe Testi (Tamsayilar ile) <<<" << std::endl;
 
-    // 1. Liste oluştur ve Rastgele Sayılarla Doldur
+    // Create a list and fill with random numbers
     VListe<int> liste;
     static std::mt19937 device(0);
     std::uniform_int_distribution<int> dist(1, 10);
@@ -319,43 +312,41 @@ void vAufgabe_6a() {
         liste.push_back(dist(device));
     }
 
-    // --- DÜZELTME BURADA ---
-    // Sayıların listeye girmesi için GÜNCELLEME yapıyoruz
     liste.vAktualisieren();
-    // -----------------------
 
-    // 2. Listeyi Yazdır
+
+    // Print the list
     std::cout << "Liste (Ilk Hali): ";
     for (auto& sayi : liste) {
         std::cout << sayi << " ";
     }
     std::cout << std::endl;
 
-    // 3. 5'ten büyük sayıları sil (erase komutu ver)
+    // Erase the numbers <5
     for (auto it = liste.begin(); it != liste.end(); ++it) {
         if (*it > 5) {
             liste.erase(it);
         }
     }
 
-    // 4. Listeyi Tekrar Yazdır (Değişiklik olMAMAlı, çünkü güncellemedik)
+    // Print the list again
     std::cout << "Liste (Aktualisieren oncesi - Silinmedi): ";
     for (auto& sayi : liste) {
         std::cout << sayi << " ";
     }
     std::cout << std::endl;
 
-    // 5. Listeyi Güncelle (Şimdi silinmeli)
+    // update the list
     liste.vAktualisieren();
 
-    // 6. Sonuç
+    // Final
     std::cout << "Liste (Aktualisieren sonrasi - >5 Silindi): ";
     for (auto& sayi : liste) {
         std::cout << sayi << " ";
     }
     std::cout << std::endl;
 
-    // 7. Başa ve Sona ekle
+    // add 99 to the front 100 to the back
     liste.push_front(99);
     liste.push_back(100);
     liste.vAktualisieren();
@@ -368,24 +359,24 @@ void vAufgabe_6a() {
 }
 
 void vAufgabe_7() {
-    // 1. Grafik Başlat
-    bInitialisiereGrafik(1000, 600); // Pencereyi biraz büyüttük
+    // Start the Graph
+    bInitialisiereGrafik(1000, 600);
 
-    // 2. Kavşakları Oluştur
-    // Kr2'de benzin istasyonu var (1000 Litre)
+    // Add the Kreuzungen
+    // Fuel Station at Kr2 (1000 Liters)
     auto Kr1 = std::make_shared<Kreuzung>("Kr1");
     auto Kr2 = std::make_shared<Kreuzung>("Kr2", 1000.0);
     auto Kr3 = std::make_shared<Kreuzung>("Kr3");
     auto Kr4 = std::make_shared<Kreuzung>("Kr4");
 
-    // Kavşakları Çiz (Koordinatlar PDF Fig 5.4'e göre yaklaşık değerler)
+    // Draw the Kreuzungen
     bZeichneKreuzung(680, 40);  // Kr1
     bZeichneKreuzung(680, 300); // Kr2
     bZeichneKreuzung(680, 570); // Kr3
     bZeichneKreuzung(320, 300); // Kr4
 
-    // 3. Yolları Bağla (Strassen)
-    // Parametreler: (K1, K2, IsimHin, IsimRueck, Uzunluk, SollamaYasagi, HızLimiti)
+    // Connect the Roads (Straßen)
+    // Parameters: (K1, K2, NameHin, NameRueck, Lenght, Overtaking Allowance, Speed Limit)
 
     // Strasse 1 (Kr1 <-> Kr2): 40km, Innerorts
     Kreuzung::vVerbinde(Kr1, Kr2, "W12", "W21", 40.0, true, Tempolimit::Innerorts);
@@ -413,43 +404,35 @@ void vAufgabe_7() {
     bZeichneStrasse("W34", "W43", 85, 5, k5);
 
     // Strasse 6 (Kr4 <-> Kr4 Loop): 130km, Landstrasse
-    // Kendi kendine dönen yol biraz özeldir, grafikte hata verirse burayı yorum satırına alabilirsin.
-    // Ancak mantıken bir kavşağı kendine bağlayabiliriz.
+
     Kreuzung::vVerbinde(Kr4, Kr4, "W44a", "W44b", 130.0, false, Tempolimit::Landstrasse);
     int k6[] = {320, 300, 170, 300, 70, 250, 80, 90, 200, 60, 320, 150, 320, 300};
     bZeichneStrasse("W44a", "W44b", 130, 7, k6);
 
 
-    // 4. Araçları Oluştur ve Yerleştir
+    // Create PKWs
     auto p1 = std::make_unique<PKW>("BMW", 120, 8.5);
     auto p2 = std::make_unique<Fahrrad>("BMX", 25);
     auto p3 = std::make_unique<PKW>("Audi", 150, 9.0);
 
-    // Araçları Kr1'e veriyoruz, o uygun bir yola koyacak
-    Kr1->vAnnahme(std::move(p1), 0.5); // 0.5 saat sonra kalksın
+    // Place the PKWs at Kr1
+    Kr1->vAnnahme(std::move(p1), 0.5); // Start after 0.5 Hours
     Kr1->vAnnahme(std::move(p2), 0.0);
     Kr1->vAnnahme(std::move(p3), 1.0);
 
 
-    // 5. Simülasyon Döngüsü
+    // Simulation Loop
     dGlobaleZeit = 0.0;
-    for (int i = 0; i < 500; ++i) { // Uzun süreli simülasyon
+    for (int i = 0; i < 500; ++i) {
         dGlobaleZeit += 0.2;
         vSetzeZeit(dGlobaleZeit);
 
-        // Tüm kavşakları simüle et (Kavşaklar da yollarını simüle eder)
+
         Kr1->vSimulieren();
         Kr2->vSimulieren();
         Kr3->vSimulieren();
         Kr4->vSimulieren();
 
-        // Çizim (Weg::vZeichnen'e nullptr kontrolü eklediğin için sorun olmaz)
-        // SimuClient her şeyi otomatik çizmez, yolları tek tek çizdirmemiz lazım
-        // Ama biz yolları Kreuzung içinde tutuyoruz.
-        // Basitlik adına Kreuzung içine vZeichnen ekleyebilirsin veya burada manuel çizebilirsin.
-        // Hızlı çözüm: Kreuzung'un vSimulieren'i içinde yolların vSimulieren'i çağrılıyor.
-        // Yolların vSimulieren'i içinde de vZeichnen çağrılıyor (Weg.cpp'deki kodunda var mı?).
-        // Eğer Weg::vSimulieren içinde fzg->vZeichnen(*this) varsa otomatik çizilir.
 
         vSleep(50);
     }
@@ -460,7 +443,7 @@ int main() {
     int iAuswahl;
 
     while (true) {
-        // Menü Yazıları
+
         std::cout << "\n\n==============================================" << std::endl;
         std::cout << "VERKEHRSSIMULATION - HAUPTMENU" << std::endl;
         std::cout << "==============================================" << std::endl;
@@ -477,7 +460,7 @@ int main() {
         std::cout << "Ihre Auswahl: ";
         std::cin >> iAuswahl;
 
-        // Hatalı giriş kontrolü (Harf girilirse döngü bozulmasın diye)
+
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -485,13 +468,13 @@ int main() {
             continue;
         }
 
-        // Çıkış komutu
+
         if (iAuswahl == 0) {
             std::cout << "Programm beendet." << std::endl;
             break;
         }
 
-        // Her görevden önce global zamanı sıfırla!
+
         dGlobaleZeit = 0.0;
 
         switch (iAuswahl) {
@@ -511,7 +494,7 @@ int main() {
                 vAufgabe_5();
                 break;
             case 6:
-                // Grafik için uyarı
+
                 std::cout << ">>> Starten Sie 'SimuServer.jar' im Hintergrund! <<<" << std::endl;
                 vAufgabe_6();
                 break;
@@ -527,9 +510,6 @@ int main() {
                 break;
         }
 
-        // Görev bittikten sonra biraz bekleme veya enter isteme (Opsiyonel)
-        // std::cout << "\nDruecken Sie ENTER fuer das Menue...";
-        // std::cin.ignore(); std::cin.get();
     }
 
     return 0;

@@ -12,11 +12,11 @@
 #include <string>
 #include <iostream>
 
-// Forward Declaration
+
 class Fahrzeug;
 class Weg;
 
-// 1. Ana İstisna Sınıfı (std::exception'dan türetilir)
+
 class Fahrausnahme : public std::exception {
 protected:
     Fahrzeug& p_pFahrzeug;
@@ -24,24 +24,24 @@ protected:
 
 public:
     Fahrausnahme(Fahrzeug& fzg, Weg& weg) : p_pFahrzeug(fzg), p_pWeg(weg) {}
-    virtual ~Fahrausnahme() {} // Sanal destructor
+    virtual ~Fahrausnahme() {}
 
-    // Saf sanal fonksiyon: İstisna yakalanınca ne yapılacak?
-    virtual void vBearbeiten() const = 0;
+
+    virtual void vBearbeiten() const = 0; //Error catcher calls
 };
 
-// 2. Losfahren (Kalkış) İstisnası
+//Exceptions
 class Losfahren : public Fahrausnahme {
 public:
     Losfahren(Fahrzeug& fzg, Weg& weg) : Fahrausnahme(fzg, weg) {}
-    virtual void vBearbeiten() const override; // Sadece deklarasyon
+    virtual void vBearbeiten() const override;
 };
 
-// 3. Streckenende (Yol Sonu) İstisnası
+//Exceptions
 class Streckenende : public Fahrausnahme {
 public:
     Streckenende(Fahrzeug& fzg, Weg& weg) : Fahrausnahme(fzg, weg) {}
-    virtual void vBearbeiten() const override; // Sadece deklarasyon
+    virtual void vBearbeiten() const override;
 };
 
 #endif /* FAHRAUSNAHME_H_ */

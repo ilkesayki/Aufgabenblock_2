@@ -10,18 +10,19 @@
 
 #include "Weg.h"
 
-// Forward declaration
+//Forward declaration
 class Fahrzeug;
 
 class Verhalten {
 protected:
-    Weg& p_pWeg; // Davranışın bağlı olduğu yol
+    Weg& p_pWeg; //must always be on a road (Parken und Fahren)
+    //can never be NULL
 
 public:
     Verhalten(Weg& weg) : p_pWeg(weg) {}
     virtual ~Verhalten() {}
 
-    // Saf sanal fonksiyon: Gidilebilecek mesafeyi hesaplar
+    //Mesure the distance
     virtual double dStrecke(Fahrzeug& aFzg, double dZeitIntervall) = 0;
 
     Weg& getWeg() const { return p_pWeg; }

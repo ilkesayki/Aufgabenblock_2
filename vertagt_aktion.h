@@ -12,8 +12,8 @@
 
 namespace vertagt {
 
-// Üst Sınıf
-template <class T>
+//Upper Class
+template <class T> //works both for int and Fahrzeug (Generic Programing)
 class VAktion {
 protected:
 	std::list<T>& p_pListe;
@@ -21,22 +21,23 @@ protected:
 public:
     VAktion(std::list<T>& ptListe) : p_pListe(ptListe) {}
     virtual ~VAktion() = default;
-    virtual void vAusfuehren() = 0;
+    virtual void vAusfuehren() = 0; //Every action has an execute command,
+    								//but each action works differently
 };
 
-// PushFront Aksiyonu
+
 template <class T>
 class VPushFront : public VAktion<T> {
 private:
 	T p_objekt;
 public:
-	VPushFront(std::list<T>& liste, T obj) : VAktion<T>(liste), p_objekt(std::move(obj)) {}
+	VPushFront(std::list<T>& liste, T obj) : VAktion<T>(liste), p_objekt(std::move(obj)) {} //Holds the reference to the actual list
 	virtual void vAusfuehren() override {
 		this->p_pListe.push_front(std::move(p_objekt));
 	}
 };
 
-// PushBack Aksiyonu
+
 template <class T>
 class VPushBack : public VAktion<T> {
 private:
@@ -48,7 +49,7 @@ public:
 	}
 };
 
-// Erase Aksiyonu
+
 template <class T>
 class VErase : public VAktion<T> {
 public:
@@ -64,5 +65,5 @@ public:
     }
 };
 
-} // namespace vertagt
+}
 #endif

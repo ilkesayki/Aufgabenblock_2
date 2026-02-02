@@ -8,6 +8,7 @@ CPP_SRCS += \
 ../Fahren.cpp \
 ../Fahrrad.cpp \
 ../Fahrzeug.cpp \
+../Kreuzung.cpp \
 ../PKW.cpp \
 ../Parken.cpp \
 ../SimuClient.cpp \
@@ -21,6 +22,7 @@ CPP_DEPS += \
 ./Fahren.d \
 ./Fahrrad.d \
 ./Fahrzeug.d \
+./Kreuzung.d \
 ./PKW.d \
 ./Parken.d \
 ./SimuClient.d \
@@ -34,6 +36,7 @@ OBJS += \
 ./Fahren.o \
 ./Fahrrad.o \
 ./Fahrzeug.o \
+./Kreuzung.o \
 ./PKW.o \
 ./Parken.o \
 ./SimuClient.o \
@@ -55,7 +58,7 @@ OBJS += \
 clean: clean--2e-
 
 clean--2e-:
-	-$(RM) ./Fahrausnahme.d ./Fahrausnahme.o ./Fahren.d ./Fahren.o ./Fahrrad.d ./Fahrrad.o ./Fahrzeug.d ./Fahrzeug.o ./PKW.d ./PKW.o ./Parken.d ./Parken.o ./SimuClient.d ./SimuClient.o ./SimuClientSocket.d ./SimuClientSocket.o ./Simulationsobjekt.d ./Simulationsobjekt.o ./Weg.d ./Weg.o ./main.d ./main.o
+	-$(RM) ./Fahrausnahme.d ./Fahrausnahme.o ./Fahren.d ./Fahren.o ./Fahrrad.d ./Fahrrad.o ./Fahrzeug.d ./Fahrzeug.o ./Kreuzung.d ./Kreuzung.o ./PKW.d ./PKW.o ./Parken.d ./Parken.o ./SimuClient.d ./SimuClient.o ./SimuClientSocket.d ./SimuClientSocket.o ./Simulationsobjekt.d ./Simulationsobjekt.o ./Weg.d ./Weg.o ./main.d ./main.o
 
 .PHONY: clean--2e-
 

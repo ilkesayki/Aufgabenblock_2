@@ -1,6 +1,6 @@
 main.o: ../main.cpp ../Fahrzeug.h ../Simulationsobjekt.h ../Verhalten.h \
   ../Weg.h ../Tempolimit.h ../vertagt_liste.h ../vertagt_aktion.h \
-  ../PKW.h ../Fahrrad.h ../SimuClient.h
+  ../PKW.h ../Fahrrad.h ../SimuClient.h ../Kreuzung.h
 ../Fahrzeug.h:
 ../Simulationsobjekt.h:
 ../Verhalten.h:
@@ -11,3 +11,4 @@ main.o: ../main.cpp ../Fahrzeug.h ../Simulationsobjekt.h ../Verhalten.h \
 ../PKW.h:
 ../Fahrrad.h:
 ../SimuClient.h:
+../Kreuzung.h:

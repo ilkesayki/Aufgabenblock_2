@@ -11,23 +11,19 @@
 #include <iostream>
 #include <cmath>
 
-extern double dGlobaleZeit;
+extern double dGlobaleZeit; //use it from the main.cpp
 
 Parken::Parken(Weg& weg, double startzeit)
-    : Verhalten(weg), p_dStartzeit(startzeit)
+    : Verhalten(weg), p_dStartzeit(startzeit) //Welche Weg und Wann muss starten
 {}
 
-// Parken.cpp (Debug hali)
 double Parken::dStrecke(Fahrzeug& aFzg, double dZeitIntervall) {
-    // Debug çıktısı: Her adımda zamanı ve start zamanını görelim
-    // std::cout << "DEBUG: Zeit=" << dGlobaleZeit << " Start=" << p_dStartzeit << std::endl;
 
-    if (dGlobaleZeit < p_dStartzeit) {
+
+    if (dGlobaleZeit < p_dStartzeit) { //Still in Park
         return 0.0;
     } else {
-        // Buraya girdiğinden emin olalım
-        // std::cout << "DEBUG: THROWING LOSFAHREN NOW!" << std::endl;
-        throw Losfahren(aFzg, p_pWeg);
+        throw Losfahren(aFzg, p_pWeg); //State Change Parken -> Fahren
         return 0.0;
     }
 }

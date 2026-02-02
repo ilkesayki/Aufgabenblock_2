@@ -10,13 +10,13 @@
 
 #include <limits>
 
-enum class Tempolimit {
+enum class Tempolimit { //class makes it Type Safety
     Innerorts = 50,
     Landstrasse = 100,
-    Autobahn = std::numeric_limits<int>::max() // Limitsiz
+    Autobahn = std::numeric_limits<int>::max() // limitless
 };
 
-// Enum'ı double'a çeviren yardımcı fonksiyon
+//converts an enum to a double
 inline double getTempolimit(Tempolimit limit) {
     return static_cast<double>(limit);
 }

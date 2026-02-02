@@ -14,42 +14,40 @@
 
 class Simulationsobjekt {
 private:
-    static int p_iMaxID; // Tüm simulation objeleri için ortak sayaç
+    static int p_iMaxID; // Static Variable (number increases with every new vehicle)
 
 protected:
-    const int p_iID;
+    const int p_iID; //vehicle id's cannot change
     std::string p_sName;
-    double p_dZeit; // En son simüle edildiği zaman
+    double p_dZeit; // local time for each vehicle
 
 public:
     Simulationsobjekt(std::string name);
     virtual ~Simulationsobjekt();
 
-    // Copy Constructor yasaklandı (Yönerge gereği)
 
-    Simulationsobjekt(const Simulationsobjekt&) = delete;
-
+    Simulationsobjekt(const Simulationsobjekt&) = delete; //No copying. To avoid confusion.
 
 
-    // Assignment operator (Sadece ismi kopyalar, ID değişmez)
-    Simulationsobjekt& operator=(const Simulationsobjekt& other);
+
+    // Assignment operator
+    Simulationsobjekt& operator=(const Simulationsobjekt& other); //copys only name not the ID
 
     // Getters
     const std::string& getName() const { return p_sName; }
     int getID() const { return p_iID; }
     double getZeit() const { return p_dZeit; }
 
-    // Pure Virtual Fonksiyon (Sınıfı soyut yapar)
-    virtual void vSimulieren() = 0;
+    // Pure Virtual Func
+    virtual void vSimulieren() = 0; //create objects derived from it (PKW, Fahrrad, Weg, Kreuzung)
 
     virtual void vAusgeben(std::ostream& o) const;
     virtual void vEinlesen(std::istream& i);
 
-    // Operatörler
     bool operator==(const Simulationsobjekt& other) const;
 };
 
-// Global çıkış operatörü (Artık Simulationsobjekt alıyor)
+
 std::ostream& operator<<(std::ostream& o, const Simulationsobjekt& so);
 
 #endif /* SIMULATIONSOBJEKT_H_ */

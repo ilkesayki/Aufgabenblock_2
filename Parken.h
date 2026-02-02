@@ -12,13 +12,14 @@
 
 class Parken : public Verhalten {
 private:
-    double p_dStartzeit; // Ne zaman hareket edecek?
+    double p_dStartzeit; //When to start!
 
 public:
-    Parken(Weg& weg, double startzeit);
+    Parken(Weg& weg, double startzeit); //Call by Reference &
     virtual ~Parken() {}
 
     virtual double dStrecke(Fahrzeug& aFzg, double dZeitIntervall) override;
+    //Distance = Speed × Time (Exception: Streckenende)
 };
 
 #endif /* PARKEN_H_ */

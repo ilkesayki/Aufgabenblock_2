@@ -22,17 +22,17 @@ public:
 
     PKW(std::string name, double maxGeschwindigkeit, double verbrauch, double tankvolumen = 55.0);
 
-    // derived class destructor!!! avoid memory leak
+    //derived class destructor
     virtual ~PKW() {}
 
-    // Fueling method dMenge = infinity
+    //Fueling to Max
     double dTanken(double dMenge = std::numeric_limits<double>::infinity()) override;
 
 
-    //overridden for fuel consumption and stopping logic when empty
+    //stopping logic when empty
     virtual void vSimulieren() override;
 
-    //overridden to add fuel data to the output
+
     virtual void vAusgeben(std::ostream& o) const override;
 
     //getter

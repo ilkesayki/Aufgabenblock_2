@@ -16,20 +16,20 @@
 
 extern double dGlobaleZeit;
 
-class Fahrzeug : public Simulationsobjekt { // Kalıtım eklendi
+class Fahrzeug : public Simulationsobjekt {  //Fahrzeug is now a Simulatiınsobjekt (Inheritance)
 protected:
     double p_dMaxGeschwindigkeit;
     double p_dGesamtStrecke;
     double p_dGesamtZeit;
-    std::unique_ptr<Verhalten> p_pVerhalten; // Davranış nesnesi
-    double p_dAbschnittStrecke; // O anki yolda gidilen mesafe
+    std::unique_ptr<Verhalten> p_pVerhalten; //Polymorphism to hold new Fahren and new Parken
+    double p_dAbschnittStrecke;
 
 public:
     Fahrzeug(std::string name = "");
     Fahrzeug(std::string name, double maxGeschwindigkeit);
     virtual ~Fahrzeug();
 
-    // Fahrzeug copy ctor'u da silmek iyi pratiktir (base silindiği için otomatik silinir ama explicit olsun)
+
     Fahrzeug(const Fahrzeug&) = delete;
     Fahrzeug& operator=(const Fahrzeug& other);
 
@@ -41,12 +41,13 @@ public:
 
     static void vKopf();
 
-    void vNeueStrecke(Weg& weg);
-    void vNeueStrecke(Weg& weg, double startzeit);
+    void vNeueStrecke(Weg& weg); //Fahren Verhalten
+    void vNeueStrecke(Weg& weg, double startzeit); //Parken Verhalten
     double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
 
     virtual void vZeichnen(const Weg& weg) const;
 
+    //virtual so that we can use it both for Fahrrad (return 0.0) and Pkw
     virtual double dTanken(double dMenge = std::numeric_limits<double>::infinity());
 };
 #endif /* FAHRZEUG_H_ */

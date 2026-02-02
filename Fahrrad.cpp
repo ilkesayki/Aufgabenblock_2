@@ -22,7 +22,7 @@ Fahrrad::Fahrrad(std::string name, double maxGeschwindigkeit)
     std::cout << "--> Erzeuge Fahrrad: ID=" << p_iID << ", Name=\"" << p_sName << "\"" << std::endl;
 }
 
-//speed calculation function (dGeschwindigkeit)
+//speed calculation for Fahrrad
 double Fahrrad::dGeschwindigkeit() const {
 
     int iAbnahmeSchritte = static_cast<int>(p_dGesamtStrecke / 20.0); //gives n
@@ -38,17 +38,15 @@ double Fahrrad::dGeschwindigkeit() const {
 }
 
 void Fahrrad::vZeichnen(const Weg& weg) const {
-    // bZeichneFahrrad(Simülasyon ismi, Yol ismi, Göreceli Konum, Hız)
     double dRelPos = p_dAbschnittStrecke / weg.getLaenge();
     bZeichneFahrrad(p_sName, weg.getName(), dRelPos, dGeschwindigkeit());
 }
 
-//output function (vAusgeben)
 void Fahrrad::vAusgeben(std::ostream& o) const {
-	////base class outputs (ID, Name, MaxSpeed, TotalDistance)
+
     Fahrzeug::vAusgeben(o);
 
-    //adds Fahrrad-specific data
+    //adds Fahrrad specific data
     o << std::setiosflags(std::ios::right)
       << std::fixed << std::setprecision(2);
 

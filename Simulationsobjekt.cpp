@@ -8,13 +8,13 @@
 
 #include "Simulationsobjekt.h"
 
-// Statik değişken başlatma
+//Start ID Counter
 int Simulationsobjekt::p_iMaxID = 0;
 
 Simulationsobjekt::Simulationsobjekt(std::string name)
-    : p_iID(++p_iMaxID), // ID burada atanıyor
+    : p_iID(++p_iMaxID), // First increase, then add (1, 2, 3...)
       p_sName(name),
-      p_dZeit(0.0)
+      p_dZeit(0.0) // Local Timer
 {
     std::cout << "--> Erzeuge Simulationsobjekt: ID=" << p_iID << ", Name=\"" << p_sName << "\"" << std::endl;
 }
@@ -30,17 +30,19 @@ void Simulationsobjekt::vAusgeben(std::ostream& o) const {
       << std::resetiosflags(std::ios::left);
 }
 
+//assignment operator
 Simulationsobjekt& Simulationsobjekt::operator=(const Simulationsobjekt& other) {
     if (this == &other) return *this;
     this->p_sName = other.p_sName;
-    // ID ve Zeit kopyalanmaz
+    // ID and Zeit cannot copied
     return *this;
 }
-
+//comparison operator
 bool Simulationsobjekt::operator==(const Simulationsobjekt& other) const {
     return this->p_iID == other.p_iID;
 }
 
+//ausgabe operator -> Ausgeben func -> Pkw ausgeben
 std::ostream& operator<<(std::ostream& o, const Simulationsobjekt& so) {
     so.vAusgeben(o);
     return o;
@@ -48,7 +50,6 @@ std::ostream& operator<<(std::ostream& o, const Simulationsobjekt& so) {
 
 
 void Simulationsobjekt::vEinlesen(std::istream& i) {
-    // Basitçe ismi okusun, şimdilik yeterli.
     if (p_sName == "") {
         i >> p_sName;
     }
